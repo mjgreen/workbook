@@ -1,0 +1,966 @@
+---
+title: "workbook-mjg"
+author: "Put your own name here"
+date: "`r Sys.Date()`"
+
+output: 
+  bookdown::html_document2:
+    number_sections: true
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=F, comment=NA)
+```
+
+# R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. 
+
+## Tutorial workbook
+
+This workbook contains the code from the tutorial paper: _Data visualisation using R, for researchers who don't use R_
+
+* [__link to the interactive website for the tutorial paper__](https://psyteachr.github.io/introdataviz/) 
+* [__link to the pdf version of the tutorial paper__](https://journals.sagepub.com/doi/pdf/10.1177/25152459221074654)
+
+You can add notes to this file and/or make a duplicate copy to work with your own dataset.
+
+The document outline tool will help you navigate this workbook more easily (Ctrl+Shift+O on Windows, Cmd+Shift+O on Mac).
+
+This workbook contains code chunks for all the the code and activities in the tutorial. If you wish to create extra code chunks, you can use the Insert Code - R menu (a green box with a C and a plus sign) or use the keyboard shortcuts (Ctrl+Alt+I on Windows, Cmd+Option+I on Mac). 
+
+When you are working in a Markdown document, the working directory (where R looks for data files to import, and where it will save any output you create) will default to the folder that the .Rmd file is stored in when you open RStudio by opening the Markdown document. For this reason, make sure that the .Rmd file and the data file are in the same folder before you begin. 
+
+# Chapter 2: Getting Started
+
+## Loading packages
+
+Remember that you need to install the packages before you can load them - but never save the install code in your Markdown.
+
+```{r, message=F}
+library(tidyverse)
+library(patchwork)
+```
+
+## Loading data
+
+```{r}
+dat <- read_csv(file = "ldt_data.csv")
+```
+
+## Handling numeric factors
+
+```{r}
+summary(dat)
+str(dat)        
+```
+
+```{r}
+dat <- mutate(dat, language = factor(
+    x = language, # column to translate
+    levels = c(1, 2), # values of the original data in preferred order
+    labels = c("monolingual", "bilingual") # labels for display
+  ))
+```
+
+## Demographic information
+
+```{r}
+dat %>%
+  group_by(language) %>%
+  count() %>%
+  ungroup()
+```
+
+```{r}
+dat %>%
+  count()
+```
+
+```{r}
+dat %>%
+  summarise(mean_age = mean(age),
+            sd_age = sd(age),
+            n_values = n())
+```
+
+```{r}
+age_stats <- dat %>%
+  summarise(mean_age = mean(age),
+            sd_age = sd(age),
+            n_values = n())
+```
+
+```{r}
+dat %>%
+  group_by(language) %>%
+  summarise(mean_age = mean(age),
+            sd_age = sd(age),
+            n_values = n()) %>%
+  ungroup()
+```
+
+## Bar chart of counts
+
+```{r fig.cap = "Bar chart of counts."}
+ggplot(data = dat, mapping = aes(x = language)) +
+  geom_bar() +
+  labs(title="Bar chart of counts")
+```
+
+## Plotting existing aggregates and percent
+
+```{r fig.cap = "Bar chart of pre-calculated counts."}
+dat_percent <- dat %>%
+  group_by(language) %>%
+  count() %>%
+  ungroup() %>%
+  mutate(percent = (n/sum(n)*100))
+
+ggplot(dat_percent, aes(x = language, y = percent)) +
+  geom_bar(stat="identity") +
+  labs(title="Bar chart of pre-calculated counts")
+```
+
+
+## Histogram
+
+```{r fig.cap = "Histogram of ages."}
+ggplot(dat, aes(x = age)) +
+  geom_histogram()+
+  labs(title="Histogram of ages.")
+```
+
+```{r fig.cap = "Histogram of ages where each bin covers one year."}
+ggplot(dat, aes(x = age)) +
+  geom_histogram(binwidth = 1) +
+  labs(title="Histogram of ages where each bin covers one year.")
+```
+
+## Customisation 1
+
+### Changing colours
+
+```{r fig.cap="Histogram with custom colors for bar fill and line colors."}
+ggplot(dat, aes(age)) +
+  geom_histogram(binwidth = 1, 
+                 fill = "white", 
+                 colour = "black") +
+  labs(title="Histogram with custom colors for bar fill and line colors.")
+```
+
+### Editing axis names and labels
+
+```{r fig.cap = "Bar chart with custom axis labels."}
+ggplot(dat, aes(language)) +
+  geom_bar() +
+  scale_x_discrete(name = "Language group") +
+  scale_y_continuous(name = "Number of participants",
+                     breaks = c(0,10,20,30,40,50))+
+  labs(title= "Bar chart with custom axis labels.")
+```
+
+
+### Discrete vs continuous errors
+
+This code chunk throws an error if you actually run it: `Discrete value supplied to continuous scale`
+
+```{r, error=TRUE}
+ggplot(dat, aes(language)) +
+  geom_bar() +
+  scale_x_continuous(name = "Language group")
+```
+
+### Adding a theme
+
+```{r fig.cap="Histogram with a custom theme."}
+ggplot(dat, aes(age)) +
+  geom_histogram(binwidth = 1, fill = "wheat", color = "black") +
+  scale_x_continuous(name = "Participant age (years)") +
+  theme_minimal() +
+  labs(title="Histogram with a custom theme.")
+```
+
+## Activities 1
+
+1. 
+
+```{r}
+
+```
+
+2. 
+
+```{r}
+
+```
+
+3. 
+
+```{r}
+
+```
+
+4.
+
+```{r}
+
+```
+
+# Chapter 3: Transforming Data
+
+Note that Matt made some changes here from the published Glasgow tutorial, namely to explicitly set the condition variable that codes for word/nonword as a factor; and as a factor whose levels are explicitly declared. This has the consequence that later ggplot calls to `condition` don't have to supply labels. Note that the published paper got the labels wrong for several plots. We avoid that possibility by setting the factor levels and labels in the data instead.
+
+## Transforming data
+
+Step 1
+
+```{r}
+long <- pivot_longer(data = dat, 
+                     cols = rt_word:acc_nonword, 
+                     names_to = c("dv_condition"),
+                     values_to = "dv")
+```
+
+Step 2
+
+```{r}
+long2 <- pivot_longer(data = dat, 
+                     cols = rt_word:acc_nonword, 
+                     names_sep = "_", 
+                     names_to = c("dv_type", "condition"),
+                     values_to = "dv")
+```
+
+Step 3
+
+```{r}
+dat_long <- 
+  pivot_wider(long2, 
+              names_from = "dv_type", 
+              values_from = "dv") %>% 
+  mutate(condition = factor(condition, 
+                            levels=c("word", "nonword"),
+                            labels=c("Word", "Non-Word"))) %>% 
+  mutate(language = factor(language,
+                           levels=c("monolingual", "bilingual"),
+                           labels=c("Monolingual", "Bilingual")))
+```
+
+Combined steps
+
+```{r}
+dat_long <- 
+  pivot_longer(data = dat, 
+               cols = rt_word:acc_nonword, 
+               names_sep = "_", 
+               names_to = c("dv_type", "condition"),
+               values_to = "dv") %>%
+  pivot_wider(names_from = "dv_type", 
+              values_from = "dv") %>% 
+  mutate(condition = factor(condition, 
+                            levels=c("word", "nonword"),
+                            labels=c("Word", "Non-Word")))%>% 
+  mutate(language = factor(language,
+                           levels=c("monolingual", "bilingual"),
+                           labels=c("Monolingual", "Bilingual")))
+```
+
+## Histogram 2
+
+```{r}
+ggplot(dat_long, aes(x = rt)) +
+  geom_histogram(binwidth = 10, fill = "white", colour = "black") +
+  scale_x_continuous(name = "Reaction time (ms)")
+
+ggplot(dat_long, aes(x = acc)) +
+  geom_histogram(binwidth = 1, fill = "white", colour = "black") +
+  scale_x_continuous(name = "Accuracy (0-100)")
+```
+
+## Density plots
+
+```{r}
+ggplot(dat_long, aes(x = rt)) +
+  geom_density()+
+  scale_x_continuous(name = "Reaction time (ms)")
+```
+
+### Grouped density plots
+
+```{r}
+ggplot(dat_long, aes(x = rt, fill = condition)) +
+  geom_density(alpha = 0.75)+
+  scale_x_continuous(name = "Reaction time (ms)")+
+  scale_fill_discrete(name = "Condition")
+```
+
+## Scatterplots
+
+```{r}
+ggplot(dat_long, aes(x = rt, y = age)) +
+  geom_point()
+```
+
+With line of best fit
+
+```{r}
+ggplot(dat_long, aes(x = rt, y = age)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+### Grouped scatterplots
+
+```{r}
+ggplot(dat_long, aes(x = rt, y = age, colour = condition)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_colour_discrete(name = "Condition")
+```
+
+## Customisation 2
+
+### Accessible colour schemes
+
+```{r}
+ggplot(dat_long, aes(x = rt, y = age, colour = condition)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_color_brewer(palette = "Dark2",
+                     name = "Condition")
+```
+
+## Activities 2
+
+1. 
+
+```{r}
+
+```
+
+2.
+
+```{r}
+
+```
+
+
+3.
+
+```{r}
+
+```
+
+4.
+
+```{r}
+
+```
+
+5. 
+
+```{r}
+
+```
+
+# Chapter 4: Representing Summary Statistics
+
+## Boxplots
+
+```{r}
+ggplot(dat_long, aes(x = condition, y = acc)) +
+  geom_boxplot()
+```
+
+### Grouped boxplots
+
+```{r}
+ggplot(dat_long, aes(x = condition, y = acc, fill = language)) +
+  geom_boxplot() +
+  scale_fill_brewer(palette = "Dark2",
+                    name = "Group") +
+  theme_classic() +
+  scale_x_discrete(name = "Condition")+
+  scale_y_continuous(name = "Accuracy")
+```
+
+## Violin plots
+
+```{r}
+ggplot(dat_long, aes(x = condition, y = acc, fill = language)) +
+  geom_violin() +
+  scale_fill_brewer(palette = "Dark2",
+                    name = "Group") +
+  theme_classic() +
+  scale_x_discrete(name = "Condition") +
+  scale_y_continuous(name = "Accuracy")
+```
+
+## Bar chart of means
+
+```{r}
+ggplot(dat_long, aes(x = condition, y = rt)) +
+  stat_summary(fun = "mean", geom = "bar")
+```
+
+```{r}
+ggplot(dat_long, aes(x = condition, y = rt)) +
+  stat_summary(fun = "mean", geom = "bar") +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .2)
+```
+
+## Violin-boxplot
+
+```{r}
+ggplot(dat_long, aes(x = condition, y= rt)) +
+  geom_violin() +
+  # remove the median line with fatten = NULL
+  geom_boxplot(width = .2, fatten = NULL) +
+  stat_summary(fun = "mean", geom = "point") +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .1)
+```
+
+Messy layers
+
+```{r}
+ggplot(dat_long, aes(x = condition, y= rt)) +
+  geom_boxplot() +  
+  geom_violin() +
+  stat_summary(fun = "mean", geom = "point") +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .1)
+```
+
+### Grouped violin-boxplots
+
+```{r}
+ggplot(dat_long, aes(x = condition, y= rt, fill = language)) +
+  geom_violin() +
+  geom_boxplot(width = .2, 
+               fatten = NULL) +
+  stat_summary(fun = "mean",  geom = "point") +
+  stat_summary(fun.data = "mean_se", 
+               geom = "errorbar", 
+               width = .1) +
+  scale_fill_brewer(palette = "Dark2")
+```
+
+Fixed positions
+
+```{r}
+# set the offset position of the geoms
+pos <- position_dodge(0.9)
+
+ggplot(dat_long, aes(x = condition, y= rt, fill = language)) +
+  geom_violin(position = pos) +
+  geom_boxplot(width = .2, 
+               fatten = NULL,
+               position = pos) +
+  stat_summary(fun = "mean", 
+               geom = "point", 
+               position = pos) +
+  stat_summary(fun.data = "mean_se", 
+               geom = "errorbar", 
+               width = .1,
+               position = pos) +
+  scale_fill_brewer(palette = "Dark2")
+
+```
+
+## Customisation part 3
+
+### Colours
+
+Hard to see colours
+
+```{r}
+ggplot(dat_long, aes(x = condition, y= rt, fill = language, 
+                     group = paste(condition, language))) +
+  geom_violin(alpha = 0.25, position = pos) +
+  geom_boxplot(width = .2, 
+               fatten = NULL, 
+               alpha = 0.75,
+               position = pos) +
+  stat_summary(fun = "mean", 
+               geom = "point", 
+               position = pos) +
+  stat_summary(fun.data = "mean_se", 
+               geom = "errorbar", 
+               width = .1,
+               position = pos) +
+  scale_fill_brewer(palette = "Dark2")
+```
+
+Adjusted geom colours
+
+```{r}
+ggplot(dat_long, aes(x = condition, y= rt, fill = language)) +
+  geom_violin(position = pos) +
+  geom_boxplot(width = .2, fatten = NULL, 
+               mapping = aes(group = interaction(condition, language)),
+               fill = "white",
+               position = pos) +
+  stat_summary(fun = "mean", 
+               geom = "point", 
+               position = pos) +
+  stat_summary(fun.data = "mean_se", 
+               geom = "errorbar", 
+               width = .1,
+               position = pos) +
+  scale_fill_brewer(palette = "Dark2")
+```
+
+
+## Activities 3
+
+1. Write any notes you have here.
+
+2. Give yourself a high five here.
+
+3. 
+
+```{r}
+
+```
+
+4.
+
+```{r}
+
+```
+
+5. 
+
+```{r}
+
+```
+
+# Chapter 5; Multi-part Plots
+
+## Interaction plots
+
+```{r}
+ggplot(dat_long, aes(x = condition, y = rt, 
+                     shape = language,
+                     group = language,
+                     color = language)) +
+  stat_summary(fun = "mean", geom = "point", size = 3) +
+  stat_summary(fun = "mean", geom = "line") +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .2) +
+  scale_color_manual(values = c("blue", "darkorange")) +
+  theme_classic()
+```
+
+## Combined interaction plots
+
+```{r}
+ggplot(dat_long, aes(x = condition, y = rt, group = language, shape = language)) +
+  geom_point(aes(colour = language),alpha = .2) +
+  geom_line(aes(group = id, colour = language), alpha = .2) +
+   stat_summary(fun = "mean", geom = "point", size = 2, colour = "black") +
+  stat_summary(fun = "mean", geom = "line", colour = "black") +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .2, colour = "black") +
+  theme_minimal()
+```
+
+## Facets
+
+Faceted scatterplots
+
+```{r}
+ggplot(dat_long, aes(x = rt, y = age, color=condition)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~condition) +
+  scale_color_discrete(name = "Condition")
+```
+
+Faceted violin-boxplots
+
+```{r}
+ggplot(dat_long, aes(x = condition, y= rt)) +
+  geom_violin() +
+  geom_boxplot(width = .2, fatten = NULL) +
+  stat_summary(fun = "mean", geom = "point") +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .1) +
+  facet_wrap(~language) +
+  theme_minimal()
+```
+
+Adjusted the facet labels
+
+```{r}
+ggplot(dat_long, aes(x = condition, y= rt)) +
+  geom_violin() +
+  geom_boxplot(width = .2, fatten = NULL) +
+  stat_summary(fun = "mean", geom = "point") +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .1) +
+  facet_wrap(~language)+
+  theme_minimal()
+```
+
+## Saving plots as variables
+
+```{r}
+p1 <- ggplot(dat_long, aes(x = rt)) +
+  geom_histogram(binwidth = 10, color = "black")
+
+p2 <- ggplot(dat_long, aes(x = acc)) +
+  geom_histogram(binwidth = 1, color = "black") 
+```
+
+```{r}
+p3 <- p2 + theme_minimal()
+```
+
+## Exporting plots
+
+```{r, eval=FALSE}
+ggsave(filename = "my_plot.png") # save last displayed plot
+```
+
+```{r, eval=FALSE}
+ggsave(filename = "my_plot.png", plot = p3) # save plot p3
+```
+
+## Mulitple plots
+
+Combining two plots
+
+```{r}
+p1 + p2 # side-by-side
+```
+
+```{r}
+p1 / p2 # stacked
+```
+
+Combining three or more plots
+
+```{r}
+p5 <- ggplot(dat_long, aes(x = condition, y = rt, group = language, shape = language)) +
+  geom_point(aes(colour = language),alpha = .2) +
+  geom_line(aes(group = id, colour = language), alpha = .2) +
+  stat_summary(fun = "mean", geom = "point", size = 2, colour = "black") +
+  stat_summary(fun = "mean", geom = "line", colour = "black") +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .2, colour = "black") +
+  theme_minimal()
+
+p6 <- ggplot(dat_long, aes(x = condition, y= rt)) +
+  geom_violin() +
+  geom_boxplot(width = .2, fatten = NULL) +
+  stat_summary(fun = "mean", geom = "point") +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .1) +
+  facet_wrap(~language)+
+  theme_minimal()
+```
+
+```{r}
+p1 /p5 / p6 
+(p1 + p6) / p5 
+p6 | p1 / p5
+```
+
+## Customisation 4
+
+### Axis labels
+
+```{r}
+p5 + labs(x = "Type of word",
+          y = "Reaction time (ms)",
+          title = "Language group by word type interaction plot",
+          subtitle = "Reaction time data")
+```
+
+### Non-meanginful colours
+
+With redundant legend
+
+```{r}
+ggplot(dat_long, aes(x = condition, y= rt, fill = language)) +
+  geom_violin(alpha = .4) +
+  geom_boxplot(width = .2, fatten = NULL, alpha = .6) +
+  stat_summary(fun = "mean", geom = "point") +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .1) +
+  facet_wrap(~language)+
+  theme_minimal() +
+  scale_fill_brewer(palette = "Dark2")
+```
+
+Without redundant legend
+
+```{r}
+ggplot(dat_long, aes(x = condition, y= rt, fill = language)) +
+  geom_violin(alpha = .4) +
+  geom_boxplot(width = .2, fatten = NULL, alpha = .6) +
+  stat_summary(fun = "mean", geom = "point") +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .1) +
+  facet_wrap(~language)+
+  theme_minimal() +
+  scale_fill_brewer(palette = "Dark2") +
+  guides(fill = "none")
+```
+
+## Activites 4
+
+1. 
+
+```{r}
+
+```
+
+2.
+
+```{r}
+
+```
+
+
+# Chapter 6: Advanced Plots
+
+```{r, echo=F}
+geom_split_violin <-
+  function (mapping = NULL, data = NULL, stat = "ydensity", position = "identity", 
+      ..., draw_quantiles = NULL, trim = TRUE, scale = "area", 
+      na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+  {
+      GeomSplitViolin <- ggplot2::ggproto("GeomSplitViolin", GeomViolin, 
+          draw_group = function(self, data, ..., draw_quantiles = NULL) {
+              data <- transform(data, xminv = x - violinwidth * 
+                  (x - xmin), xmaxv = x + violinwidth * (xmax - 
+                  x))
+              grp <- data[1, "group"]
+              newdata <- plyr::arrange(transform(data, x = if (grp%%2 == 
+                  1) 
+                  xminv
+              else xmaxv), if (grp%%2 == 1) 
+                  y
+              else -y)
+              newdata <- rbind(newdata[1, ], newdata, newdata[nrow(newdata), 
+                  ], newdata[1, ])
+              newdata[c(1, nrow(newdata) - 1, nrow(newdata)), "x"] <- round(newdata[1, 
+                  "x"])
+              if (length(draw_quantiles) > 0 & !scales::zero_range(range(data$y))) {
+                  stopifnot(all(draw_quantiles >= 0), all(draw_quantiles <= 
+                    1))
+                  quantiles <- ggplot2:::create_quantile_segment_frame(data, 
+                    draw_quantiles)
+                  aesthetics <- data[rep(1, nrow(quantiles)), setdiff(names(data), 
+                    c("x", "y")), drop = FALSE]
+                  aesthetics$alpha <- rep(1, nrow(quantiles))
+                  both <- cbind(quantiles, aesthetics)
+                  quantile_grob <- ggplot2::GeomPath$draw_panel(both, 
+                    ...)
+                  ggplot2:::ggname("geom_split_violin", grid::grobTree(ggplot2::GeomPolygon$draw_panel(newdata, 
+                    ...), quantile_grob))
+              }
+              else {
+                  ggplot2:::ggname("geom_split_violin", ggplot2::GeomPolygon$draw_panel(newdata, 
+                    ...))
+              }
+          })
+      layer(data = data, mapping = mapping, stat = stat, geom = GeomSplitViolin, 
+          position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+          params = list(trim = trim, scale = scale, draw_quantiles = draw_quantiles, 
+              na.rm = na.rm, ...))
+  }
+geom_flat_violin <-
+  function (mapping = NULL, data = NULL, stat = "ydensity", position = "dodge", 
+    trim = TRUE, scale = "area", show.legend = NA, inherit.aes = TRUE, 
+    ...) 
+{
+    GeomFlatViolin <- ggplot2::ggproto("Violinist", Geom, setup_data = function(data, 
+        params) {
+        data$width <- data$width %||% params$width %||% (ggplot2::resolution(data$x, 
+            FALSE) * 0.9)
+        data %>% dplyr::group_by(group) %>% dplyr::mutate(ymin = min(y), 
+            ymax = max(y), xmin = x, xmax = x + width/2) %>% 
+            dplyr::ungroup()
+    }, draw_group = function(data, panel_scales, coord) {
+        data <- transform(data, xminv = x, xmaxv = x + violinwidth * 
+            (xmax - x))
+        newdata <- rbind(plyr::arrange(transform(data, x = xminv), 
+            y), plyr::arrange(transform(data, x = xmaxv), -y))
+        newdata <- rbind(newdata, newdata[1, ])
+        ggplot2:::ggname("geom_flat_violin", ggplot2::GeomPolygon$draw_panel(newdata, 
+            panel_scales, coord))
+    }, draw_key = draw_key_polygon, default_aes = aes(weight = 1, 
+        colour = "grey20", fill = "white", size = 0.5, alpha = NA, 
+        linetype = "solid"), required_aes = c("x", "y"))
+    layer(data = data, mapping = mapping, stat = stat, geom = GeomFlatViolin, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = list(trim = trim, scale = scale, ...))
+  }
+geom_alluvuim <-
+  function (mapping = NULL, data = NULL, stat = "alluvium", 
+    position = "identity", width = 1/3, knot.pos = 1/4, 
+    knot.prop = TRUE, curve_type = NULL, curve_range = NULL, 
+    segments = NULL, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, 
+    ...) 
+{
+    layer(geom = GeomAlluvium, mapping = mapping, data = data, 
+        stat = stat, position = position, show.legend = show.legend, 
+        inherit.aes = inherit.aes, params = list(width = width, 
+            knot.pos = knot.pos, knot.prop = knot.prop, curve_type = curve_type, 
+            curve_range = curve_range, segments = segments, na.rm = na.rm, 
+            ...))
+}
+```
+
+## Split-violin plots
+
+Split-violin plots remove the redundancy of mirrored violin plots and make it easier to compare the distributions between multiple conditions.
+
+```{r}
+ggplot(dat_long, aes(x = condition, y = rt, fill = language)) +
+  geom_split_violin(alpha = .4, trim = FALSE) +
+  geom_boxplot(width = .2, alpha = .6, fatten = NULL, show.legend = FALSE) +
+  stat_summary(fun.data = "mean_se", geom = "pointrange", show.legend = F, 
+               position = position_dodge(.175)) +
+  scale_x_discrete(name = "Condition")+
+  scale_y_continuous(name = "Reaction time (ms)",
+                     breaks = seq(200, 800, 100), 
+                     limits = c(200, 800)) +
+  scale_fill_brewer(palette = "Dark2", name = "Language group") +
+  theme_minimal()
+
+
+```
+
+## Raincloud plots
+
+Raincloud plots combine a density plot, boxplot, raw data points, and any desired summary statistics for a complete visualisation of the data. They are so called because the density plot plus raw data is reminiscent of a rain cloud.
+
+```{r}
+rain_height <- .1
+
+ggplot(dat_long, aes(x = "", y = rt, fill = language)) +
+  # clouds
+  geom_flat_violin(trim=FALSE, alpha = 0.4,
+    position = position_nudge(x = rain_height+.05)) +
+  # rain
+  geom_point(aes(colour = language), size = 2, alpha = .5, show.legend = FALSE, 
+              position = position_jitter(width = rain_height, height = 0)) +
+  # boxplots
+  geom_boxplot(width = rain_height, alpha = 0.4, show.legend = FALSE, 
+               outlier.shape = NA,
+               position = position_nudge(x = -rain_height*2)) +
+  # mean and SE point in the cloud
+  stat_summary(fun.data = mean_cl_normal, mapping = aes(color = language), show.legend = FALSE,
+               position = position_nudge(x = rain_height * 3)) +
+  # adjust layout
+  scale_x_discrete(name = "", expand = c(rain_height*3, 0, 0, 0.7)) +
+  scale_y_continuous(name = "Reaction time (ms)",
+                     breaks = seq(200, 800, 100), 
+                     limits = c(200, 800)) +
+  coord_flip() +
+  facet_wrap(~condition, 
+             nrow = 2) +
+  # custom colours and theme
+  scale_fill_brewer(palette = "Dark2", name = "Language group") +
+  scale_colour_brewer(palette = "Dark2") +
+  theme_minimal() +
+  theme(panel.grid.major.y = element_blank(),
+        legend.position = c(0.8, 0.8),
+        legend.background = element_rect(fill = "white", color = "white"))+
+  labs(caption="Raincloud plot.\nThe point and line in the centre of each cloud represents its mean and 95% CI. The rain respresents individual data points.")
+```
+
+## Ridge plots
+
+Ridge plots are a series of density plots that show the distribution of values for several groups. Figure 6.3 shows data from [(Nation, 2017)](https://github.com/zonination/perceptions) and demonstrates how effective this type of visualisation can be to convey a lot of information very intuitively whilst being visually attractive.
+
+```{r}
+# read in data from Nation et al. 2017
+#data <- read_csv("https://raw.githubusercontent.com/zonination/perceptions/master/probly.csv", col_types = "d")
+data <- read_csv("probly.csv", col_types = "d")
+
+# convert to long format and percents
+long <- pivot_longer(data, cols = everything(),
+                     names_to = "label",
+                     values_to = "prob") %>%
+  mutate(label = factor(label, names(data), names(data)),
+         prob = prob/100)
+
+# ridge plot
+ggplot(long, aes(x = prob, y = label, fill = label)) + 
+  ggridges::geom_density_ridges(scale = 2, show.legend = FALSE) +
+  scale_x_continuous(name = "Assigned Probability", 
+                     limits = c(0, 1), labels = scales::percent) +
+  # control space at top and bottom of plot
+  scale_y_discrete(name = "", expand = c(0.02, 0, .08, 0)) + 
+  scale_fill_viridis_d(option = "D") +# colourblind-safe colours
+  labs(caption="How do people interpret probability expressions?")
+```
+
+## Alluvial plots
+Alluvial plots visualise multi-level categorical data through flows that can easily be traced in the diagram.
+
+```{r}
+library(ggalluvial)
+
+# simulate data for 4 years of grades from 500 students
+# with a correlation of 0.75 from year to year
+# and a slight increase each year
+dat <- faux::sim_design(
+  within = list(year = c("Y1", "Y2", "Y3", "Y4")),
+  n = 500,
+  mu = c(Y1 = 0, Y2 = .2, Y3 = .4, Y4 = .6), r = 0.75, 
+  dv = "grade", long = TRUE, plot = FALSE) %>%
+  # convert numeric grades to letters with a defined probability
+  mutate(grade = faux::norm2likert(grade, prob = c("3rd" = 5, "2.2" = 10, "2.1" = 40, "1st" = 20)),
+         grade = factor(grade, c("1st", "2.1", "2.2", "3rd"))) %>%
+  # reformat data and count each combination
+  tidyr::pivot_wider(names_from = year, values_from = grade) %>%
+  dplyr::count(Y1, Y2, Y3, Y4)
+
+# plot data with colours by Year1 grades
+ggplot(dat, aes(y = n, axis1 = Y1, axis2 = Y2, axis3 = Y3, axis4 = Y4)) +
+  geom_alluvium(aes(fill = Y4), width = 1/6) +
+  geom_stratum(fill = "grey", width = 1/3, color = "black") +
+  geom_label(stat = "stratum", aes(label = after_stat(stratum))) +
+  scale_fill_viridis_d(name = "Final Classification") +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+
+## Maps
+Working with maps can be tricky. The sf package provides functions that work with ggplot2, such as geom_sf(). The rnaturalearth package provides high-quality mapping coordinates.
+
+```{r}
+library(sf)          # for mapping geoms
+# install.packages("rnaturalearthhires", repos = "http://packages.ropensci.org", type = "source")
+library(rnaturalearth) # for map data
+
+# get and bind country data
+uk_sf <- ne_states(country = "united kingdom", returnclass = "sf")
+ireland_sf <- ne_states(country = "ireland", returnclass = "sf")
+islands <- bind_rows(uk_sf, ireland_sf) %>%
+  filter(!is.na(geonunit))
+
+# set colours
+country_colours <- c("Scotland" = "#0962BA",
+                     "Wales" = "#00AC48",
+                     "England" = "#FF0000",
+                     "Northern Ireland" = "#FFCD2C",
+                     "Ireland" = "#F77613")
+
+ggplot() + 
+  geom_sf(data = islands,
+          mapping = aes(fill = geonunit),
+          colour = NA,
+          alpha = 0.75) +
+  coord_sf(crs = sf::st_crs(4326),
+           xlim = c(-10.7, 2.1), 
+           ylim = c(49.7, 61)) +
+  scale_fill_manual(name = "Country", 
+                    values = country_colours)
+```
+

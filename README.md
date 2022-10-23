@@ -32,4 +32,3 @@ We make extensive use of the University of Glasgow's _introdataviz_ approach[^1]
 
 [^1]: Nordmann, E., McAleer, P., Toivo, W., Paterson, H. & DeBruine, L. (2022). Data visualisation using R, for researchers who don't use R. Advances in Methods and Practices in Psychological Science. https://doi.org/10.1177/25152459221074654
 
-[^2]: My reference.

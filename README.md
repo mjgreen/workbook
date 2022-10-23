@@ -13,8 +13,8 @@ We make extensive use of the University of Glasgow's [_introdataviz_](https://do
 ## Set up R
 
 * Use Appsanywhere
-  * Direct link is [https://appsanywhere.bournemouth.ac.uk?id=2468&name=R%20for%20Windows%20Suite%204.2.1](https://appsanywhere.bournemouth.ac.uk?id=2468&name=R%20for%20Windows%20Suite%204.2.1)
+  * Click this [direct link](https://appsanywhere.bournemouth.ac.uk?id=2468&name=R%20for%20Windows%20Suite%204.2.1)
     * or:
-  * Use the search box and paste in __R for Windows Suite 4.2.1__ (avoids being misled by the alternatives with similar names -- then add it to your favourites so you can find it again more easily)
+  * Use the search box and paste in `R for Windows Suite 4.2.1` (avoids being misled by the alternatives with similar names -- then star it to add it to your favourites so you can find it again more easily next time)
   
 

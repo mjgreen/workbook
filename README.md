@@ -3,7 +3,8 @@
 <!--[Link](https://github.com/mjgreen/workbook/archive/refs/heads/main.zip) to download this repository as a zip file-->
 ## Data Visualization Using R, for Researchers Who Do Not Use R
 
-We make extensive use of the University of Glasgow's `introdataviz` approach, _Data Visualization Using R, for Researchers Who Do Not Use R_ [(Nordmann et al., 2022)](https://doi.org/10.1177/25152459221074654)
+We make extensive use of the University of Glasgow's [_introdataviz_](https://doi.org/10.1177/25152459221074654) approach
+<!--, _Data Visualization Using R, for Researchers Who Do Not Use R_ [(Nordmann et al., 2022)](https://doi.org/10.1177/25152459221074654)-->
 
 * [Link](https://osf.io/5e64r) to the pdf version of the article with post-publication corrections 
 * [Link](https://psyteachr.github.io/introdataviz/index.html) to the interactive website tutorial version of the article

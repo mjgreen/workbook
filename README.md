@@ -3,8 +3,10 @@ workbook for R for beginners
 
 Link to [Download this repository as zip](https://github.com/mjgreen/workbook/archive/refs/heads/main.zip)
 
-Link to the pdf version of the article [_Data visualisation using R, for researchers who don’t use R_](https://osf.io/5e64r)
+We make extensive use of the article _Data visualisation using R, for researchers who don’t use R_ [Nordmann et al., 2022](https://doi.org/10.1177/25152459221074654)
 
-Link to the [interactive website tutorial version of the article](https://psyteachr.github.io/introdataviz/index.html)
+<-- Nordmann, E., McAleer, P., Toivo, W., Paterson, H. & DeBruine, L. (2022). Data visualisation using R, for researchers who don't use R. Advances in Methods and Practices in Psychological Science. https://doi.org/10.1177/25152459221074654 -->
 
-Links to Matt's version of the Rmarkdown workbook for the tutorial version of the article: [Rmarkdown Rmd file](https://mjgreen.github.io/workbook/workbook-mjg.Rmd) or [html output from the markdown](https://mjgreen.github.io/workbook/workbook-mjg)
+* Link to the [pdf](https://osf.io/5e64r) version of the article 
+* Link to the interactive [website](https://psyteachr.github.io/introdataviz/index.html) tutorial version of the article
+* Link to Matt's version of the Rmarkdown [workbook](https://mjgreen.github.io/workbook/workbook-mjg) 

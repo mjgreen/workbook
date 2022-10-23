@@ -14,7 +14,7 @@ Use AppsAnywhere
 
 ## Set up for the course _R for beginners_
 
-The course consists of a website at [mjgreen.github.io/workbook](https://mjgreen.github.io/workbook/) and an R package `beginr` at  [mjgreen.github.io/beginr](https://mjgreen.github.io/beginr).
+The course consists of a website at [mjgreen.github.io/workbook](https://mjgreen.github.io/workbook/) and an R package `beginr` at  [github.com/mjgreen/beginr](https://github.com/mjgreen/beginr).
 
 We make extensive use of the University of Glasgow's _introdataviz_ approach - a tutorial that teaches how to use R's plotting routines to carry out visual exploratory data analysis - with 3 main components:
 

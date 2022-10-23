@@ -1,7 +1,7 @@
 # R for beginners
 
 <!--[Link](https://github.com/mjgreen/workbook/archive/refs/heads/main.zip) to download this repository as a zip file-->
-## Data Visualization Using R, for Researchers Who Don't Use R
+## Data visualization using R, for researchers who don't use R
 
 We make extensive use of the University of Glasgow's [_introdataviz_](https://doi.org/10.1177/25152459221074654) approach
 <!--, _Data Visualization Using R, for Researchers Who Do Not Use R_ [(Nordmann et al., 2022)](https://doi.org/10.1177/25152459221074654)-->

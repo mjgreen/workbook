@@ -24,17 +24,12 @@ Use AppsAnywhere
 
 The course consists of a website at [mjgreen.github.io/workbook](https://mjgreen.github.io/workbook/) and an R package `beginr` at  [mjgreen.github.io/beginr](https://mjgreen.github.io/beginr).
 
-We make extensive use of the University of Glasgow's _introdataviz_ approach [^1] -- a tutorial that teaches how to use R's plotting routines to carry out visual exploratory data analysis -- with 3 main components:
+We make extensive use of the University of Glasgow's _introdataviz_ approach[^1] -- a tutorial that teaches how to use R's plotting routines to carry out visual exploratory data analysis -- with 3 main components:
 
 1. A __journal article__ cited below
 2. An __interactive website__ that gives the code for the plots; some explanatory material in plain English; and some self-test exercises with their solutions.
 3. An Rmarkdown __workbook__ which you use to run the code on your own computer and record your answers to the self-tests from the website.
 
+[^1]: Nordmann, E., McAleer, P., Toivo, W., Paterson, H. & DeBruine, L. (2022). Data visualisation using R, for researchers who don't use R. Advances in Methods and Practices in Psychological Science. https://doi.org/10.1177/25152459221074654
 
-
-<!-- a github repository that hosts a workbook in Rmarkdown format. The workbook is accompanying material for the introdataviz article and website-->
-
-## references
-
-[1] Nordmann, E., McAleer, P., Toivo, W., Paterson, H. & DeBruine, L. (2022). Data visualisation using R, for researchers who don't use R. Advances in Methods and Practices in Psychological Science. https://doi.org/10.1177/25152459221074654
-
+[^2]: My reference.

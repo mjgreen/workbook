@@ -1,14 +1,6 @@
 # R for beginners
 
------
-
-<!--[Link](https://github.com/mjgreen/workbook/archive/refs/heads/main.zip) to download this repository as a zip file-->
-
-
-
-<!--* [Link](https://osf.io/5e64r) to the pdf version of the article with post-publication corrections -->
-<!--* [Link](https://psyteachr.github.io/introdataviz/index.html) to the interactive website tutorial version of the article-->
-<!--* [Link](https://mjgreen.github.io/workbook/workbook-mjg.html) to Matt's version of the output of the Rmarkdown workbook-->
+Information about the _R for beginners_ course in October 2022 at BU.
 
 ## Set up R / RStudio
 

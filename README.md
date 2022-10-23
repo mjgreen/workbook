@@ -1,6 +1,4 @@
----
-title: R for beginners
----
+# R for beginners
 
 <!--[Link](https://github.com/mjgreen/workbook/archive/refs/heads/main.zip) to download this repository as a zip file-->
 ## Data Visualization Using R, for Researchers Who Do Not Use R

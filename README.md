@@ -1,4 +1,4 @@
-[Link](https://github.com/mjgreen/workbook/archive/refs/heads/main.zip) to download this repository as a zip file
+<!--[Link](https://github.com/mjgreen/workbook/archive/refs/heads/main.zip) to download this repository as a zip file-->
 
 We make extensive use of the article _Data Visualization Using R, for Researchers Who Do Not Use R_ [(Nordmann et al., 2022)](https://doi.org/10.1177/25152459221074654)
 

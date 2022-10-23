@@ -9,17 +9,20 @@ We make extensive use of the University of Glasgow's _introdataviz_ approach (No
 * [Link](https://psyteachr.github.io/introdataviz/index.html) to the interactive website tutorial version of the article
 * [Link](https://mjgreen.github.io/workbook/workbook-mjg.html) to Matt's version of the output of the Rmarkdown workbook
 
-## Set up R
+## Set up R / RStudio
 
 Use AppsAnywhere
 
 * Click this [direct link to the correct version](https://appsanywhere.bournemouth.ac.uk?id=2468&name=R%20for%20Windows%20Suite%204.2.1)
 * Or visit [AppsAnywhere's homepage](https://appsanywhere.bournemouth.ac.uk) and use the search box and paste in `R for Windows Suite 4.2.1` -- avoid accidentally choosing one of the many alternatives with similar names -- then star it to add it to your favourites so you can find it again more easily next time
 * Now you can fire up `RStudio` by clicking on the windows start button and typing `RStudio`
-* If you're on a Mac, ask Matt to set it up for you in the class, or see https://cran.r-project.org/bin/macosx/ for R itself and  https://www.rstudio.com/products/rstudio/download/#download for Rstudio
+* If you're on a Mac, ask Matt to set it up for you in the class, or see the links for [R itself](https://cran.r-project.org/bin/macosx/) and for [Rstudio](https://www.rstudio.com/products/rstudio/download/#download)
 
 
+## Set up for the course _R for beginners_
 
+The main website for the course is [mjgreen.github.io/workbook](https://mjgreen.github.io/workbook/)
+This site is a github repository that hosts a workbook in Rmarkdown format
 
   
 

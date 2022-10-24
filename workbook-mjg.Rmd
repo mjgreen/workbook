@@ -321,7 +321,7 @@ dat_long <-
 ### Using `beginr`
 
 ```{r}
-dat_long = beginr::dat_long
+load("dat_long.rda")
 ```
 
 ## Histogram 2

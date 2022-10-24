@@ -1541,7 +1541,7 @@ library(&quot;readr&quot;)
 library(&quot;dplyr&quot;)
 library(&quot;tidyr&quot;)
 library(&quot;patchwork&quot;)
-library(&quot;beginr&quot;)</code></pre>
+library(&quot;pander&quot;)</code></pre>
 </div>
 <div id="loading-data" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Loading data</h2>
@@ -1599,9 +1599,8 @@ factors</h2>
   c(1, 2),
   c(&quot;monolingual&quot;, &quot;bilingual&quot;)
 ))</code></pre>
-<p>We skip this part of the tutorial and take advantage of the fact that
-our <code>beginr</code> package supplies <code>ldt_data</code></p>
-<pre class="r"><code>dat &lt;- beginr::ldt_data</code></pre>
+<p>Load <code>dat.rda</code> for safety.</p>
+<pre class="r"><code>load(&quot;dat.rda&quot;)</code></pre>
 </div>
 <div id="summarising-data" class="section level2" number="2.5">
 <h2><span class="header-section-number">2.5</span> Summarising data</h2>
@@ -1851,11 +1850,6 @@ declared. This has the consequence that later ggplot calls to
 published paper got the labels wrong for several plots. We avoid that
 possibility by setting the factor levels and labels in the data
 instead.</p>
-<p>The package <code>beginr</code> provides datasets in wide and long
-form. When you load the package, <code>ldt_data</code> and
-<code>dat_long</code> become available in the workspace. To keep the R
-for beginners course at BU simple, we skip the stuff in the original
-tutorial about transforming data, at least for day 1.</p>
 <div id="data-formats" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Data formats</h2>
 <p>Stuff about wide and long formats.</p>
@@ -1893,6 +1887,8 @@ pivot_wider()</h3>
   mutate(language = factor(language,
                            levels=c(&quot;monolingual&quot;, &quot;bilingual&quot;),
                            labels=c(&quot;Monolingual&quot;, &quot;Bilingual&quot;)))</code></pre>
+<p>Load <code>dat_long.rda</code> for safety</p>
+<pre class="r"><code>load(&quot;dat_long.rda&quot;)</code></pre>
 <p>Combined steps</p>
 <pre class="r"><code>dat_long &lt;-
   pivot_longer(data = dat,

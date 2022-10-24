@@ -50,7 +50,7 @@ library("readr")
 library("dplyr")
 library("tidyr")
 library("patchwork")
-#library("beginr")
+library("pander")
 ```
 
 ## Loading data
@@ -89,10 +89,10 @@ dat <- mutate(dat, language = factor(
 ))
 ```
 
-We skip this part of the tutorial and take advantage of the fact that our `beginr` package supplies `ldt_data`
+Load `dat.rda` for safety.
 
 ```{r}
-dat <- beginr::ldt_data
+load("dat.rda")
 ```
 
 ## Summarising data
@@ -251,8 +251,6 @@ For the solutions, see [the website link](https://psyteachr.github.io/introdatav
 
 Note that Matt made some changes here from the published Glasgow tutorial, namely to explicitly set the condition variable that codes for word/nonword as a factor; and as a factor whose levels are explicitly declared. This has the consequence that later ggplot calls to `condition` don't have to supply labels. Note that the published paper got the labels wrong for several plots. We avoid that possibility by setting the factor levels and labels in the data instead.
 
-The package `beginr` provides datasets in wide and long form. When you load the package, `ldt_data` and `dat_long` become available in the workspace. To keep the R for beginners course at BU simple, we skip the stuff in the original tutorial about transforming data, at least for day 1.
-
 ## Data formats
 
 Stuff about wide and long formats.
@@ -293,6 +291,13 @@ dat_long <-
                            levels=c("monolingual", "bilingual"),
                            labels=c("Monolingual", "Bilingual")))
 ```
+
+Load `dat_long.rda` for safety
+
+```{r}
+load("dat_long.rda")
+```
+
 
 Combined steps
 

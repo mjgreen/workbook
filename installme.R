@@ -2,5 +2,5 @@
 # in the place on the C drive that IT let us write to on BU devices
 
 .libPaths(new=c("C:/ProgramData/R/Rlibs/R420"))
-install.packages(c("patchwork", "readr", "magrittr", "ggplot2", "readr", "dplyr", "tidyr", "patchwork", "devtools", "markdown"))
-devtools::install_github("mjgreen/beginr")
+install.packages(c("patchwork", "readr", "magrittr", "ggplot2", "dplyr", "tidyr", "markdown", "pander"), lib="C:/ProgramData/R/Rlibs/R420")
+

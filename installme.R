@@ -3,4 +3,4 @@
 
 .libPaths(new=c("C:/ProgramData/R/Rlibs/R420"))
 install.packages(c("patchwork", "readr", "magrittr", "ggplot2", "readr", "dplyr", "tidyr", "patchwork", "devtools", "markdown"))
-renv::install("mjgreen/beginr")
+devtools::install_github("mjgreen/beginr")

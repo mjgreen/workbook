@@ -50,7 +50,7 @@ library("readr")
 library("dplyr")
 library("tidyr")
 library("patchwork")
-library("beginr")
+#library("beginr")
 ```
 
 ## Loading data

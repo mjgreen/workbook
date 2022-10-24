@@ -27,10 +27,6 @@ When you click the **Knit** button a document will be generated that includes bo
 
 This workbook contains the code from the tutorial paper: _Data visualisation using R, for researchers who don't use R_
 
-* [__link to the interactive website for the tutorial paper__](https://psyteachr.github.io/introdataviz/) 
-* [__link to the pdf version of the tutorial paper__](https://journals.sagepub.com/doi/pdf/10.1177/25152459221074654)
-* [__link to Matt's workbook files for the "R for beginners" course: https://github.com/mjgreen/workbook__](https://github.com/mjgreen/workbook)
-
 You can add notes to this file and/or make a duplicate copy to work with your own dataset.
 
 The document outline tool will help you navigate this workbook more easily (Ctrl+Shift+O on Windows, Cmd+Shift+O on Mac).
@@ -43,20 +39,24 @@ When you are working in a Markdown document, the working directory (where R look
 
 ## Loading packages
 
+```{r, include=F, message=F}
+# This chunk will test for the required packages and install them
+# in the place on the C drive that IT let us write to on BU devices
+
+.libPaths(new=c("C:/ProgramData/R/Rlibs/R420"))
+if (!require("tidyverse")){install.packages("tidyverse", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
+if (!require("patchwork")){install.packages("patchwork", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
+if (!require("devtools")){install.packages("devtools", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
+if (!require("Hmisc")){install.packages("Hmisc", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
+if (!require("beginr")){devtools::install_github("mjgreen/beginr", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
+```
+
 Remember that you need to install the packages before you can load them - but never save the install code in your Markdown.
 
 ```{r, message=F}
-.libPaths(new=c("C:/ProgramData/R/Rlibs/R420"))
-if (!require("tidyverse")){install.packages("tidyverse", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
 library("tidyverse")
-if (!require("patchwork")){install.packages("patchwork", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
 library("patchwork")
-if (!require("devtools")){install.packages("devtools", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
-library("devtools")
-if (!require("Hmisc")){install.packages("Hmisc", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
-if (!require("beginr")){devtools::install_github("mjgreen/beginr", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
 library("beginr")
-dat_long = manufacture_ldt_long_data()
 ```
 
 ## Loading data

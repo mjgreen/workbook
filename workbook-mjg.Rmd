@@ -4,17 +4,19 @@ author: "Put your own name here"
 date: "`r Sys.Date()`"
 output:
   html_document:
+    #df_print: paged
+    df_print: !expr pander::pander
     css: "style.css"
     number_sections: true
     toc: true
-    toc_depth: 3
+    toc_depth: 2
     toc_float:
       collapsed: false
       smooth_scroll: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning=F, comment=NA)
+knitr::opts_chunk$set(echo = TRUE, warning=F, comment=NA, message=F)
 ```
 
 # R Markdown
@@ -51,7 +53,13 @@ if (!require("patchwork")){install.packages("patchwork", lib="C:/ProgramData/R/R
 
 if (!require("Hmisc")){install.packages("Hmisc", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
 
-if (!require("beginr")){install.packages("beginr_0.1.2.zip", lib="C:/ProgramData/R/Rlibs/R420", type="binary", repos=NULL)}
+if (!require("pander")){install.packages("pander", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
+
+if (!require("devtools")){install.packages("devtools", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
+
+#if (!require("beginr")){install.packages("beginr_0.1.2.zip", lib="C:/ProgramData/R/Rlibs/R420", type="binary", repos=NULL)}
+
+if (!require("beginr")){devtools::install_github("mjgreen/beginr", lib="C:/ProgramData/R/Rlibs/R420")}
 ```
 
 Remember that you need to install the packages before you can load them - but never save the install code in your Markdown.
@@ -64,9 +72,11 @@ library("beginr")
 
 ## Loading data
 
+
 ```{r}
 dat <- read_csv(file = "ldt_data.csv")
 ```
+
 
 ## Handling numeric factors
 
@@ -74,6 +84,7 @@ dat <- read_csv(file = "ldt_data.csv")
 summary(dat)
 str(dat)        
 ```
+
 
 ```{r}
 dat <- mutate(dat, language = factor(
@@ -83,7 +94,25 @@ dat <- mutate(dat, language = factor(
   ))
 ```
 
-## Demographic information
+## Argument names
+
+The above code could also be written as:
+
+```{r}
+dat <- mutate(dat, language = factor(
+  language,
+  c(1, 2),
+  c("monolingual", "bilingual")
+))
+```
+
+We skip this part of the tutorial and take advantage of the fact that our `beginr` package supplies `ldt_data`
+
+```{r}
+dat <- beginr::ldt_data
+```
+
+## Summarising data
 
 ```{r}
 dat %>%
@@ -128,7 +157,7 @@ ggplot(data = dat, mapping = aes(x = language)) +
   labs(title="Bar chart of counts")
 ```
 
-## Plotting existing aggregates
+## Aggregates and percentages
 
 ```{r}
 dat_percent <- dat %>%
@@ -136,12 +165,19 @@ dat_percent <- dat %>%
   count() %>%
   ungroup() %>%
   mutate(percent = (n/sum(n)*100))
+```
 
+```{r}
+dat_percent
+```
+
+Now omitting argument names
+
+```{r}
 ggplot(dat_percent, aes(x = language, y = percent)) +
   geom_bar(stat="identity") +
   labs(title="Bar chart of pre-calculated counts")
 ```
-
 
 ## Histogram
 
@@ -153,8 +189,8 @@ ggplot(dat, aes(x = age)) +
 
 ```{r}
 ggplot(dat, aes(x = age)) +
-  geom_histogram(binwidth = 1) +
-  labs(title="Histogram of ages where each bin covers one year.")
+  geom_histogram(binwidth = 5) +
+  labs(title="Histogram of ages where each bin covers five years")
 ```
 
 ## Customisation 1
@@ -181,11 +217,12 @@ ggplot(dat, aes(language)) +
 ```
 
 
-### Discrete vs continuous errors
+* Discrete vs continuous errors
 
 This code chunk throws an error if you actually run it: `Discrete value supplied to continuous scale`
 
 ```{r, error=TRUE}
+# produces an error
 ggplot(dat, aes(language)) +
   geom_bar() +
   scale_x_continuous(name = "Language group")
@@ -203,65 +240,72 @@ ggplot(dat, aes(age)) +
 
 ## Activities 1
 
-1. 
+For the solutions, see [the website link](https://psyteachr.github.io/introdataviz/getting-started.html#activities-1)
+
+1. Add a layer that edits the name of the y-axis histogram label to "Number of participants"
 
 ```{r}
+# add code for 1 here
 
 ```
 
-2. 
+2. Change the colour of the bars in the bar chart to red.
 
 ```{r}
+# add code for 2 here
 
 ```
 
-3. 
+3. Remove theme_minimal() from the histogram and instead apply one of the other available themes. To find out about other available themes, start typing theme_ and the auto-complete will show you the available options - this will only work if you have loaded the tidyverse library with library(tidyverse).
 
 ```{r}
+# add code for 3 here
 
 ```
 
-4.
-
-```{r}
-
-```
 
 # Chapter 3: Transforming Data
 
 Note that Matt made some changes here from the published Glasgow tutorial, namely to explicitly set the condition variable that codes for word/nonword as a factor; and as a factor whose levels are explicitly declared. This has the consequence that later ggplot calls to `condition` don't have to supply labels. Note that the published paper got the labels wrong for several plots. We avoid that possibility by setting the factor levels and labels in the data instead.
 
-## Transforming data
+The package `beginr` provides datasets in wide and long form. When you load the package, `ldt_data` and `dat_long` become available in the workspace. To keep the R for beginners course at BU simple, we skip the stuff in the original tutorial about transforming data, at least for day 1.
 
-Step 1
+## Data formats
+
+Stuff about wide and long formats.
+
+## Wide to long format
+
+### Step 1: pivot_longer()
+
 
 ```{r}
-long <- pivot_longer(data = dat, 
-                     cols = rt_word:acc_nonword, 
+long <- pivot_longer(data = dat,
+                     cols = rt_word:acc_nonword,
                      names_to = c("dv_condition"),
                      values_to = "dv")
 ```
 
-Step 2
+### Step 2: pivot_longer()
 
 ```{r}
-long2 <- pivot_longer(data = dat, 
-                     cols = rt_word:acc_nonword, 
-                     names_sep = "_", 
+long2 <- pivot_longer(data = dat,
+                     cols = rt_word:acc_nonword,
+                     names_sep = "_",
                      names_to = c("dv_type", "condition"),
                      values_to = "dv")
 ```
 
-Step 3
+### Step 3: pivot_wider()
 
 ```{r}
-dat_long <- 
-  pivot_wider(long2, 
-              names_from = "dv_type", 
-              values_from = "dv") %>% 
-  mutate(condition = factor(condition, 
+dat_long <-
+  pivot_wider(long2,
+              names_from = "dv_type",
+              values_from = "dv") %>%
+  mutate(condition = factor(condition,
                             levels=c("word", "nonword"),
-                            labels=c("Word", "Non-Word"))) %>% 
+                            labels=c("Word", "Non-Word"))) %>%
   mutate(language = factor(language,
                            levels=c("monolingual", "bilingual"),
                            labels=c("Monolingual", "Bilingual")))
@@ -270,20 +314,26 @@ dat_long <-
 Combined steps
 
 ```{r}
-dat_long <- 
-  pivot_longer(data = dat, 
-               cols = rt_word:acc_nonword, 
-               names_sep = "_", 
+dat_long <-
+  pivot_longer(data = dat,
+               cols = rt_word:acc_nonword,
+               names_sep = "_",
                names_to = c("dv_type", "condition"),
                values_to = "dv") %>%
-  pivot_wider(names_from = "dv_type", 
-              values_from = "dv") %>% 
-  mutate(condition = factor(condition, 
+  pivot_wider(names_from = "dv_type",
+              values_from = "dv") %>%
+  mutate(condition = factor(condition,
                             levels=c("word", "nonword"),
-                            labels=c("Word", "Non-Word")))%>% 
+                            labels=c("Word", "Non-Word")))%>%
   mutate(language = factor(language,
                            levels=c("monolingual", "bilingual"),
                            labels=c("Monolingual", "Bilingual")))
+```
+
+### Using `beginr`
+
+```{r}
+dat_long = beginr::dat_long
 ```
 
 ## Histogram 2
@@ -293,12 +343,49 @@ ggplot(dat_long, aes(x = rt)) +
   geom_histogram(binwidth = 10, fill = "white", colour = "black") +
   scale_x_continuous(name = "Reaction time (ms)") +
   labs(title = "Histogram of reaction times")
+```
 
+```{r}
 ggplot(dat_long, aes(x = acc)) +
   geom_histogram(binwidth = 1, fill = "white", colour = "black") +
   scale_x_continuous(name = "Accuracy (0-100)") +
-  labs(title = "Histogram of accuracy rates (percent)")
+  labs(title = "Histogram of percent correct")
 ```
+
+* Histogram with normal distribution
+
+```{r}
+ggplot(dat_long, aes(rt)) +
+  geom_histogram(aes(y = ..density..),
+                 binwidth = 10, fill = "red", color = "black", alpha=0.35) +
+  stat_function(
+    fun = dnorm, 
+    args = list(mean = mean(dat_long$rt), 
+                sd = sd(dat_long$rt)),
+    lwd=1,
+    color="blue"
+  ) +
+  labs(title = "Histogram of RT with normal distribution overlay")+
+  theme_bw()
+```
+
+```{r}
+ggplot(dat_long, aes(acc)) +
+  geom_histogram(aes(y = ..density..),
+                 binwidth = 1, fill = "yellow", color = "black", alpha=0.25) +
+  stat_function(
+    fun = dnorm, 
+    args = list(mean = mean(dat_long$acc), 
+                sd = sd(dat_long$acc)),
+    lwd=1,
+    color="brown"
+  ) +
+  labs(title = "Histogram of accuracy with normal distribution overlay") +
+  xlab("Percent correct")+ 
+  theme_bw()
+```
+
+
 
 ## Density plots
 
@@ -346,6 +433,25 @@ ggplot(dat_long, aes(x = rt, y = age, colour = condition)) +
   labs(title = "Scatter plot of reaction times with line of best fit, per condition")
 ```
 
+## Long to wide format
+
+Using the wide format from earlier
+
+```{r}
+ggplot(dat, aes(x = rt_word, y = rt_nonword, colour = language)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+Generating wide format from long format instead.
+
+```{r}
+dat_wide <- dat_long %>%
+  pivot_wider(id_cols = "id",
+              names_from = "condition", 
+              values_from = c(rt,acc))
+```
+
 ## Customisation 2
 
 ### Accessible colour schemes
@@ -355,44 +461,71 @@ ggplot(dat_long, aes(x = rt, y = age, colour = condition)) +
   geom_point() +
   geom_smooth(method = "lm") +
   scale_color_brewer(palette = "Dark2", name = "Condition") +
-  labs(title = "Scatter plot of reaction times with line of best fit, per condition, accessible color scheme")
+  labs(title = "Scatter plot of reaction times with line of best fit, per condition", subtitle="accessible color scheme")
 ```
+
+### Specifying axis breaks with `seq()`
+
+The below code edits the y-axis so that age is displayed in increments of 5.
+
+```{r}
+ggplot(dat_long, aes(x = rt, y = age)) +
+  geom_point() +
+  scale_y_continuous(breaks = c(20,25,30,35,40,45,50,55,60)) +
+  labs(title="Specify axis breaks with c(...)")
+```
+
+However, this is somewhat inefficient. Instead, we can use the function seq() (short for sequence) to specify the first and last value and the increments by which the breaks should display between these two values.
+
+```{r}
+ggplot(dat_long, aes(x = rt, y = age)) +
+  geom_point() +
+  scale_y_continuous(breaks = seq(20,60, by = 10)) +
+  labs(title="Specify axis breaks with seq(...)")
+```
+
 
 ## Activities 2
 
-1. 
+For solutions see this [link to the website](https://psyteachr.github.io/introdataviz/transforming-data.html#activities-2)
+
+1. Use fill to created grouped histograms that display the distributions for rt for each language group separately and also edit the fill axis labels. Try adding position = "dodge" to geom_histogram() to see what happens.
 
 ```{r}
+# put answer to 1 here
 
 ```
 
-2.
+2. Use scale_* functions to edit the name of the x and y-axis on the scatterplot
 
 ```{r}
+# put answer to 2 here
 
 ```
 
-
-3.
+3. Use se = FALSE to remove the confidence envelope from the scatterplots
 
 ```{r}
+# put answer to 3 here
 
 ```
 
-4.
+4. Remove method = "lm" from geom_smooth() to produce a curved fit line.
 
 ```{r}
+# put answer to 4 here
 
 ```
 
-5. 
+5.  Replace the default fill on the grouped density plot with a colour-blind friendly version.
 
 ```{r}
+# put answer to 5 here
 
 ```
 
 <!-- # Chapter 4: Representing Summary Statistics -->
-# Chapter 4: Summary Statistics
+# Chapter 4: Representing summary statistics
 
 ## Boxplots
 
@@ -549,25 +682,30 @@ ggplot(dat_long, aes(x = condition, y= rt, fill = language)) +
 
 ## Activities 3
 
-1. Write any notes you have here.
+For solutions see [this link to the website](https://psyteachr.github.io/introdataviz/representing-summary-statistics.html#activities-3)
 
-2. Give yourself a high five here.
+1. Review all the code you have run so far. Try to identify the commonalities between each plot's code and the bits of the code you might change if you were using a different dataset.
 
-3. 
+2. Take a moment to recognise the complexity of the code you are now able to read.
+
+3. For the violin-boxplot, for geom = "point", try changing fun to median
 
 ```{r}
+# put answer to 3 here
 
 ```
 
-4.
+4. For the violin-boxplot, for geom = "errorbar", try changing fun.data to mean_cl_normal (for 95% CI)
 
 ```{r}
+# put answer to 4 here
 
 ```
 
-5. 
+5. Go back to the grouped density plots and try changing the transparency with alpha.
 
 ```{r}
+# put answer to 5 here
 
 ```
 
@@ -627,7 +765,7 @@ ggplot(dat_long, aes(x = condition, y= rt)) +
   labs(title = "Faceted violin-boxplots")
 ```
 
-## Saving plots as variables
+## Storing plots as variables
 
 ```{r}
 p1 <- ggplot(dat_long, aes(x = rt)) +
@@ -643,7 +781,7 @@ p2 <- ggplot(dat_long, aes(x = acc)) +
 p3 <- p2 + theme_minimal() + labs(title = "Accuracy histogram with minimal theme")
 ```
 
-## Exporting plots
+## Saving plots as png files
 
 ```{r, eval=FALSE}
 ggsave(filename = "my_plot.png") # save last displayed plot
@@ -655,7 +793,7 @@ ggsave(filename = "my_plot.png", plot = p3) # save plot p3
 
 ## Mulitple plots
 
-Combining two plots
+### Combining two plots
 
 ```{r}
 p1 + p2 # side-by-side
@@ -665,7 +803,7 @@ p1 + p2 # side-by-side
 p1 / p2 # stacked
 ```
 
-Combining three or more plots
+### Combining three or more plots
 
 ```{r}
 p5 <- ggplot(dat_long, aes(x = condition, y = rt, group = language, shape = language)) +
@@ -676,7 +814,9 @@ p5 <- ggplot(dat_long, aes(x = condition, y = rt, group = language, shape = lang
   stat_summary(fun.data = "mean_se", geom = "errorbar", width = .2, colour = "black") +
   theme_minimal() +
   labs(title = "Interaction plot with group and individual interactions")
+```
 
+```{r}
 p6 <- ggplot(dat_long, aes(x = condition, y= rt)) +
   geom_violin() +
   geom_boxplot(width = .2, fatten = NULL) +
@@ -689,7 +829,13 @@ p6 <- ggplot(dat_long, aes(x = condition, y= rt)) +
 
 ```{r}
 p1 /p5 / p6 
+```
+
+```{r}
 (p1 + p6) / p5 
+```
+
+```{r}
 p6 | p1 / p5
 ```
 
@@ -704,7 +850,7 @@ p5 + labs(x = "Type of word",
           subtitle = "Reaction time data")
 ```
 
-### Non-meanginful colours
+### Redundant aesthetics
 
 With redundant legend
 
@@ -737,109 +883,26 @@ ggplot(dat_long, aes(x = condition, y= rt, fill = language)) +
 
 ## Activites 4
 
-1. 
+For solutions see [this link to the website](https://psyteachr.github.io/introdataviz/multi-part-plots.html#activities-4)
+
+1. Rather than mapping both variables (condition and language) to a single interaction plot with individual participant data, instead produce a faceted plot that separates the monolingual and bilingual data. All visual elements should remain the same (colours and shapes) and you should also take care not to have any redundant legends.
 
 ```{r}
+# put answer to 1 here
 
 ```
 
-2.
+2. Choose your favourite three plots you've produced so far in this tutorial, tidy them up with axis labels, your preferred colour scheme, and any necessary titles, and then combine them using patchwork. If you're feeling particularly proud of them, post them on Twitter using #PsyTeachR.
 
 ```{r}
+# put answer to 2 here
 
 ```
 
 
 # Chapter 6: Advanced Plots
 
-```{r, echo=F}
-geom_split_violin <-
-  function (mapping = NULL, data = NULL, stat = "ydensity", position = "identity", 
-      ..., draw_quantiles = NULL, trim = TRUE, scale = "area", 
-      na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)   {
-      GeomSplitViolin <- ggplot2::ggproto("GeomSplitViolin", GeomViolin, 
-          draw_group = function(self, data, ..., draw_quantiles = NULL) {
-              data <- transform(data, xminv = x - violinwidth * 
-                  (x - xmin), xmaxv = x + violinwidth * (xmax - 
-                  x))
-              grp <- data[1, "group"]
-              newdata <- plyr::arrange(transform(data, x = if (grp%%2 == 
-                  1) 
-                  xminv
-              else xmaxv), if (grp%%2 == 1) 
-                  y
-              else -y)
-              newdata <- rbind(newdata[1, ], newdata, newdata[nrow(newdata), 
-                  ], newdata[1, ])
-              newdata[c(1, nrow(newdata) - 1, nrow(newdata)), "x"] <- round(newdata[1, 
-                  "x"])
-              if (length(draw_quantiles) > 0 & !scales::zero_range(range(data$y))) {
-                  stopifnot(all(draw_quantiles >= 0), all(draw_quantiles <= 
-                    1))
-                  quantiles <- ggplot2:::create_quantile_segment_frame(data, 
-                    draw_quantiles)
-                  aesthetics <- data[rep(1, nrow(quantiles)), setdiff(names(data), 
-                    c("x", "y")), drop = FALSE]
-                  aesthetics$alpha <- rep(1, nrow(quantiles))
-                  both <- cbind(quantiles, aesthetics)
-                  quantile_grob <- ggplot2::GeomPath$draw_panel(both, 
-                    ...)
-                  ggplot2:::ggname("geom_split_violin", grid::grobTree(ggplot2::GeomPolygon$draw_panel(newdata, 
-                    ...), quantile_grob))
-              }
-              else {
-                  ggplot2:::ggname("geom_split_violin", ggplot2::GeomPolygon$draw_panel(newdata, 
-                    ...))
-              }
-          })
-      layer(data = data, mapping = mapping, stat = stat, geom = GeomSplitViolin, 
-          position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
-          params = list(trim = trim, scale = scale, draw_quantiles = draw_quantiles, 
-              na.rm = na.rm, ...))
-  }
 
-geom_flat_violin <-
-  function (mapping = NULL, data = NULL, stat = "ydensity", position = "dodge", 
-    trim = TRUE, scale = "area", show.legend = NA, inherit.aes = TRUE, 
-    ...) {
-    GeomFlatViolin <- ggplot2::ggproto("Violinist", Geom, setup_data = function(data, 
-        params) {
-        data$width <- data$width %||% params$width %||% (ggplot2::resolution(data$x, 
-            FALSE) * 0.9)
-        data %>% dplyr::group_by(group) %>% dplyr::mutate(ymin = min(y), 
-            ymax = max(y), xmin = x, xmax = x + width/2) %>% 
-            dplyr::ungroup()
-    }, draw_group = function(data, panel_scales, coord) {
-        data <- transform(data, xminv = x, xmaxv = x + violinwidth * 
-            (xmax - x))
-        newdata <- rbind(plyr::arrange(transform(data, x = xminv), 
-            y), plyr::arrange(transform(data, x = xmaxv), -y))
-        newdata <- rbind(newdata, newdata[1, ])
-        ggplot2:::ggname("geom_flat_violin", ggplot2::GeomPolygon$draw_panel(newdata, 
-            panel_scales, coord))
-    }, draw_key = draw_key_polygon, default_aes = aes(weight = 1, 
-        colour = "grey20", fill = "white", size = 0.5, alpha = NA, 
-        linetype = "solid"), required_aes = c("x", "y"))
-    layer(data = data, mapping = mapping, stat = stat, geom = GeomFlatViolin, 
-        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
-        params = list(trim = trim, scale = scale, ...))
-  }
-
-geom_alluvuim <-
-  function (mapping = NULL, data = NULL, stat = "alluvium", 
-    position = "identity", width = 1/3, knot.pos = 1/4, 
-    knot.prop = TRUE, curve_type = NULL, curve_range = NULL, 
-    segments = NULL, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, 
-    ...) {
-    layer(geom = GeomAlluvium, mapping = mapping, data = data, 
-        stat = stat, position = position, show.legend = show.legend, 
-        inherit.aes = inherit.aes, params = list(width = width, 
-            knot.pos = knot.pos, knot.prop = knot.prop, curve_type = curve_type, 
-            curve_range = curve_range, segments = segments, na.rm = na.rm, 
-            ...))
-  }
-
-```
 
 ## Split-violin plots
 
@@ -928,5 +991,8 @@ ggplot(long, aes(x = prob, y = label, fill = label)) +
 ```
 
 
-The End.
+# Appendices
+
+```{r, child="appendix-a-resources.Rmd"}
+```
 

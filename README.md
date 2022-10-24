@@ -6,7 +6,7 @@ Information about the _R for beginners_ course in October 2022 at BU.
 
 Use AppsAnywhere
 
-![](appsanywhere-r-suite-profile.png)
+![](img/appsanywhere-r-suite-profile.png)
 
 * Click this [direct link to the correct version](https://appsanywhere.bournemouth.ac.uk?id=2468&name=R%20for%20Windows%20Suite%204.2.1)
 * Or visit [AppsAnywhere's homepage](https://appsanywhere.bournemouth.ac.uk) and use the search box and paste in `R for Windows Suite 4.2.1` - avoid accidentally choosing one of the many alternatives with similar names - then star it to add it to your favourites so you can find it again more easily next time
@@ -26,18 +26,18 @@ Steps
 * Go to the github repository
 * Download zip
 
-![](download-workbook-zip-profile.png)
+![](img/download-workbook-zip-profile.png)
 
 * Unzip
 * Double-click on `workbook.Rproj`
 
-![](rproj-img.png)
+![](img/rproj-img.png)
 
 * click on `workbook-mjg.Rmd`
 * save as `workbook-YOURINITIALS.Rmd`
 * click the `knit` button at the top of the file
 
-![](knit-button.png)
+![](img/knit-button.png)
 
 
 ## `introdataviz`

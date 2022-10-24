@@ -6,7 +6,7 @@ Information about the _R for beginners_ course in October 2022 at BU.
 
 Use AppsAnywhere
 
-![](appsanywhere-r-suite.png)
+![](appsanywhere-r-suite.png){width="50%"}
 
 * Click this [direct link to the correct version](https://appsanywhere.bournemouth.ac.uk?id=2468&name=R%20for%20Windows%20Suite%204.2.1)
 * Or visit [AppsAnywhere's homepage](https://appsanywhere.bournemouth.ac.uk) and use the search box and paste in `R for Windows Suite 4.2.1` - avoid accidentally choosing one of the many alternatives with similar names - then star it to add it to your favourites so you can find it again more easily next time

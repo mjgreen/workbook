@@ -21,6 +21,15 @@ The course consists of:
 * a github repository at [github.com/mjgreen/workbook](https://github.com/mjgreen/workbook/) 
 * an R package `beginr` at  [github.com/mjgreen/beginr](https://github.com/mjgreen/beginr)
 
+Steps
+
+* Go to the github repository
+* Download zip
+* ![](download-workbook-zip-profile.png)
+
+
+## `introdataviz`
+
 We make extensive use of the University of Glasgow's _introdataviz_ approach - a tutorial that teaches how to use R's plotting routines to carry out visual exploratory data analysis - with 3 main components:
 
 * A __journal article__[^1] in pdf format for printing: as well as a __revised version__[^2] that corrects some errors in the published article

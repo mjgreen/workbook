@@ -292,13 +292,6 @@ dat_long <-
                            labels=c("Monolingual", "Bilingual")))
 ```
 
-Load `dat_long.rda` for safety
-
-```{r}
-load("dat_long.rda")
-```
-
-
 Combined steps
 
 ```{r}
@@ -318,11 +311,12 @@ dat_long <-
                            labels=c("Monolingual", "Bilingual")))
 ```
 
-### Using `beginr`
+Load `dat_long.rda` for safety
 
 ```{r}
 load("dat_long.rda")
 ```
+
 
 ## Histogram 2
 

@@ -1887,8 +1887,6 @@ pivot_wider()</h3>
   mutate(language = factor(language,
                            levels=c(&quot;monolingual&quot;, &quot;bilingual&quot;),
                            labels=c(&quot;Monolingual&quot;, &quot;Bilingual&quot;)))</code></pre>
-<p>Load <code>dat_long.rda</code> for safety</p>
-<pre class="r"><code>load(&quot;dat_long.rda&quot;)</code></pre>
 <p>Combined steps</p>
 <pre class="r"><code>dat_long &lt;-
   pivot_longer(data = dat,
@@ -1904,10 +1902,7 @@ pivot_wider()</h3>
   mutate(language = factor(language,
                            levels=c(&quot;monolingual&quot;, &quot;bilingual&quot;),
                            labels=c(&quot;Monolingual&quot;, &quot;Bilingual&quot;)))</code></pre>
-</div>
-<div id="using-beginr" class="section level3" number="3.2.4">
-<h3><span class="header-section-number">3.2.4</span> Using
-<code>beginr</code></h3>
+<p>Load <code>dat_long.rda</code> for safety</p>
 <pre class="r"><code>load(&quot;dat_long.rda&quot;)</code></pre>
 </div>
 </div>

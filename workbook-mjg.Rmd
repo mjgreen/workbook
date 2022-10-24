@@ -48,7 +48,8 @@ if (!require("tidyverse")){install.packages("tidyverse", lib="C:/ProgramData/R/R
 if (!require("patchwork")){install.packages("patchwork", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
 if (!require("devtools")){install.packages("devtools", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
 if (!require("Hmisc")){install.packages("Hmisc", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
-if (!require("beginr")){devtools::install_github("mjgreen/beginr", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
+#if (!require("beginr")){devtools::install_github("mjgreen/beginr", lib="C:/ProgramData/R/Rlibs/R420", type="binary")}
+if (!require("beginr")){install.packages("beginr_0.1.1.zip", type="binary", repos=NULL)}
 ```
 
 Remember that you need to install the packages before you can load them - but never save the install code in your Markdown.

@@ -33,6 +33,13 @@ Steps
 
 ![](rproj-img.png)
 
+* click on `workbook-mjg.Rmd`
+* save as `workbook-YOURINITIALS.Rmd`
+* click the `knit` button at the top of the file
+
+![](knit-button.png)
+
+
 ## `introdataviz`
 
 We make extensive use of the University of Glasgow's _introdataviz_ approach - a tutorial that teaches how to use R's plotting routines to carry out visual exploratory data analysis - with 3 main components:

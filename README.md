@@ -25,8 +25,13 @@ Steps
 
 * Go to the github repository
 * Download zip
-* ![](download-workbook-zip-profile.png)
 
+![](download-workbook-zip-profile.png)
+
+* Unzip
+* Double-click on `workbook.Rproj`
+
+![](rproj-img.png)
 
 ## `introdataviz`
 

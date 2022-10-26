@@ -6,3 +6,4 @@ install.packages(c("patchwork", "readr", "magrittr", "ggplot2", "dplyr", "tidyr"
 
 # for rmarkown
 install.packages("rmarkdown", lib="C:/ProgramData/R/Rlibs/R420", type="win.binary")
+install.packages("kableExtra", lib="C:/ProgramData/R/Rlibs/R420", type="win.binary")

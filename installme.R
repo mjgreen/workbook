@@ -4,3 +4,5 @@
 .libPaths(new=c("C:/ProgramData/R/Rlibs/R420"))
 install.packages(c("patchwork", "readr", "magrittr", "ggplot2", "dplyr", "tidyr", "markdown", "pander"), lib="C:/ProgramData/R/Rlibs/R420")
 
+# for rmarkown
+install.packages("rmarkdown", lib="C:/ProgramData/R/Rlibs/R420", type="win.binary")

@@ -12,8 +12,10 @@ Use AppsAnywhere
 * Or visit [AppsAnywhere's homepage](https://appsanywhere.bournemouth.ac.uk) and use the search box and paste in `R for Windows Suite 4.2.1` - avoid accidentally choosing one of the many alternatives with similar names - then star it to add it to your favourites so you can find it again more easily next time
 * Now you can fire up `RStudio` by clicking on the windows start button and typing `RStudio`
 * If you're on a Mac, ask Matt to set it up for you in the class, or see the links for [R itself](https://cran.r-project.org/bin/macosx/) and for [Rstudio](https://www.rstudio.com/products/rstudio/download/#download)
-* run `.libPaths(new=c("C:/ProgramData/R/Rlibs/R420"))`
-* run `install.packages("tidyverse", "knitr", "kableExtra", "rmarkdown", lib="C:/ProgramData/R/Rlibs/R420", type="win.binary")`
+* run 
+    * `.libPaths(new=c("C:/ProgramData/R/Rlibs/R420"))`
+* run 
+    * `install.packages(c("tidyverse", "knitr", "kableExtra", "rmarkdown"), lib="C:/ProgramData/R/Rlibs/R420", type="win.binary")`
 
 
 ## Set up for the course _R for beginners_
